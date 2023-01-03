@@ -4,31 +4,34 @@ import DeleteNote from './component/DeleteNote';
 import EditNote from './component/EditNote'
 import './App.css';
 import { API_URL } from './api/config';
+import { useParams } from 'react-router-dom';
 
 function App() {
   const [notes, setNotes] = useState([]);
+  const {userId} = useParams();
   const getNotes = async () => {
-    const response = await fetch(`${API_URL}`, { method: 'GET' });
+    if (!userId) return;
+    const response = await fetch(`${API_URL}/users/${userId}`, { method: 'GET' });
     const data = await response.json()
-    setNotes(data)
+    setNotes(data.notes)
   };
   useEffect(() => {
     getNotes()
-  }, [])
+  }, [userId])
   return (
     <div className='main-container'>
       <section className='header-container'>
         <h1>Notes</h1>
-        <AddNote notes={notes} onNotesChange={setNotes} />
+        <AddNote onNotesChange={setNotes} id={userId} />
       </section>
       <section className='all-notes-container'>
-        {notes.map((note) => (
-          <div className='note-container' key={note._id}>
+        {notes.map((note, index) => (
+          <div className='note-container' key={index}>
             <h3>{note.title}</h3>
             <p>{note.text}</p>
             <section className='action-button'>
-              <EditNote note={note} notes={notes} onNotesChange={setNotes} />
-              <DeleteNote note={note} notes={notes} onNotesChange={setNotes} />
+              <EditNote note={note} id={userId} number={index} onNotesChange={setNotes} />
+              <DeleteNote note={note} id={userId} number={index} onNotesChange={setNotes} />
             </section>
           </div>
         ))}

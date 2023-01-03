@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Dialog, DialogActions, DialogTitle, DialogContent, Button, TextField } from '@mui/material';
 import { API_URL } from '../api/config';
 
-export default function AddNote({ notes, onNotesChange }) {
+export default function AddNote({ onNotesChange, id }) {
     const [openAdd, setOpenAdd] = useState(false)
     const [text, setText] = useState('');
     const [title, setTitle] = useState('');
@@ -13,9 +13,9 @@ export default function AddNote({ notes, onNotesChange }) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ title: title, text: text })
         };
-        const response = await fetch(`${API_URL}`, requestOption);
-        const data = await response.json()
-        onNotesChange([...notes, data]);
+        const response = await fetch(`${API_URL}/users/${id}/notes`, requestOption);
+        const data = await response.json();
+        onNotesChange(data.notes);
     };
     const handleOpen = () => {
         setOpenAdd(true);

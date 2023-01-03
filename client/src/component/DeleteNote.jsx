@@ -3,14 +3,15 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText, Button } from "@mui/material";
 import { API_URL } from "../api/config";
 
-export default function DeleteNote({ onNotesChange, notes, note }) {
+export default function DeleteNote({ onNotesChange, note, id, number }) {
     const [openDelete, setOpenDelete] = useState(false)
-    const deleteNote = async (id) => {
+    const deleteNote = async (index) => {
         const requestOption = {
             method: 'DELETE',
         };
-        await fetch(`${API_URL}/${id}`, requestOption);
-        onNotesChange(notes.filter(note => note._id !== id));
+        const response = await fetch(`${API_URL}/users/${id}/notes/${index}`, requestOption);
+        const data = await response.json();
+        onNotesChange(data.notes)
     };
     const handleClickOpenDelete = () => {
         setOpenDelete(true);
@@ -31,7 +32,7 @@ export default function DeleteNote({ onNotesChange, notes, note }) {
                 <DialogActions>
                     <Button onClick={handleCloseDelete}>Cancel</Button>
                     <Button onClick={(event) => {
-                        deleteNote(note._id);
+                        deleteNote(number);
                         handleCloseDelete();
                     }}>Delete</Button>
                 </DialogActions>

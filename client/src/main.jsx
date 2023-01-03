@@ -5,7 +5,7 @@ import './index.css'
 import { createBrowserRouter, RouterProvider, Route} from "react-router-dom";
 const router = createBrowserRouter([
   {
-    path:"/",
+    path:"/notes/:userId",
     element:<App/>
   }
 ])

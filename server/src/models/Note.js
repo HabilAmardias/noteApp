@@ -9,9 +9,7 @@ const noteSchema = new mongoose.Schema({
         required: true,
         type: String
     },
-    notes:{
-        type: [{title: String, text: String}]
-    }
+    notes: [{title: String, text: String}]
 })
 
 const Note = mongoose.model('Note', noteSchema)

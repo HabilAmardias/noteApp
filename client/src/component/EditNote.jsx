@@ -2,24 +2,19 @@ import { useState } from "react";
 import { Dialog, DialogTitle, DialogActions, DialogContent, Button, TextField } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { API_URL } from "../api/config";
-export default function DeleteNote({ onNotesChange, notes, note }) {
+export default function DeleteNote({ onNotesChange, note, id, number }) {
     const [openEdit, setOpenEdit] = useState(false)
     const [newTitle, setNewTitle] = useState('')
     const [newText, setNewText] = useState('')
-    const editNote = async (id) => {
+    const editNote = async (index) => {
         const requestOption = {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ title: newTitle, text: newText })
         };
-        await fetch(`${API_URL}/${id}`, requestOption);
-        const editedNotes = notes.map(note => {
-            if (note._id === `${id}`) {
-                return { ...note, title: newTitle, text: newText }
-            }
-            return note
-        });
-        onNotesChange(editedNotes)
+        const response = await fetch(`${API_URL}/users/${id}/notes/${index}`, requestOption);
+        const data = await response.json();
+        onNotesChange(data.notes)
     };
     const handleClickOpenEdit = () => {
         setOpenEdit(true);
@@ -51,7 +46,7 @@ export default function DeleteNote({ onNotesChange, notes, note }) {
                 <DialogActions>
                     <Button onClick={handleCloseEdit}>Cancel</Button>
                     <Button onClick={() => {
-                        editNote(note._id);
+                        editNote(number);
                         handleCloseEdit();
                     }}>Edit</Button>
                 </DialogActions>
