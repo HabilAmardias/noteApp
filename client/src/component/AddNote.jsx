@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react';
 import { Dialog, DialogActions, DialogTitle, DialogContent, Button, TextField } from '@mui/material';
+import { API_URL } from '../api/config';
 
 export default function AddNote({ notes, onNotesChange }) {
     const [openAdd, setOpenAdd] = useState(false)
@@ -12,7 +13,7 @@ export default function AddNote({ notes, onNotesChange }) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ title: title, text: text })
         };
-        const response = await fetch('http://localhost:8888/', requestOption);
+        const response = await fetch(`${API_URL}`, requestOption);
         const data = await response.json()
         onNotesChange([...notes, data]);
     };

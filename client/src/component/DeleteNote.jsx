@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText, Button } from "@mui/material";
+import { API_URL } from "../api/config";
 
 export default function DeleteNote({ onNotesChange, notes, note }) {
     const [openDelete, setOpenDelete] = useState(false)
@@ -8,7 +9,7 @@ export default function DeleteNote({ onNotesChange, notes, note }) {
         const requestOption = {
             method: 'DELETE',
         };
-        await fetch(`http://localhost:8888/${id}`, requestOption);
+        await fetch(`${API_URL}/${id}`, requestOption);
         onNotesChange(notes.filter(note => note._id !== id));
     };
     const handleClickOpenDelete = () => {

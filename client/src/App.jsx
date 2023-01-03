@@ -3,11 +3,12 @@ import AddNote from './component/AddNote';
 import DeleteNote from './component/DeleteNote';
 import EditNote from './component/EditNote'
 import './App.css';
+import { API_URL } from './api/config';
 
 function App() {
   const [notes, setNotes] = useState([]);
   const getNotes = async () => {
-    const response = await fetch('http://localhost:8888/', { method: 'GET' });
+    const response = await fetch(`${API_URL}`, { method: 'GET' });
     const data = await response.json()
     setNotes(data)
   };

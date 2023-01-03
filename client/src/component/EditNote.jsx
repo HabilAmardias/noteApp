@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Dialog, DialogTitle, DialogActions, DialogContent, Button, TextField } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
+import { API_URL } from "../api/config";
 export default function DeleteNote({ onNotesChange, notes, note }) {
     const [openEdit, setOpenEdit] = useState(false)
     const [newTitle, setNewTitle] = useState('')
@@ -11,7 +12,7 @@ export default function DeleteNote({ onNotesChange, notes, note }) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ title: newTitle, text: newText })
         };
-        await fetch(`http://localhost:8888/${id}`, requestOption);
+        await fetch(`${API_URL}/${id}`, requestOption);
         const editedNotes = notes.map(note => {
             if (note._id === `${id}`) {
                 return { ...note, title: newTitle, text: newText }
