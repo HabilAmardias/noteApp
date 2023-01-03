@@ -96,7 +96,9 @@ app.use((err, req, res, next) => {
     if (err.name === 'Validation Error') {
         err = handleValidationErr(err);
         next(err);
-    };
+    } else{
+        next(err);
+    }
 });
 
 app.use((err, req, res, next) => {
