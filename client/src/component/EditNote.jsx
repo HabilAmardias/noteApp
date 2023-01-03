@@ -32,14 +32,14 @@ export default function DeleteNote({ onNotesChange, notes, note }) {
             <Dialog open={openEdit} onClose={handleCloseEdit}>
                 <DialogTitle>Edit note</DialogTitle>
                 <DialogContent>
-                    <TextField autoFocus type='text' id='standard-required' label='Note Title' defaultValue={note.title} fullWidth variant='standard' required onChange={(evt) => {
+                    <TextField autoFocus type='text' value={newTitle} id='standard-required' label='Note Title' fullWidth variant='standard' required onChange={(evt) => {
                         if (evt.target.value === null) {
                             setNewTitle(note.title)
                         } else {
                             setNewTitle(evt.target.value)
                         }
                     }} />
-                    <TextField type='text' name='text' id='standard-required' label='Note Text' defaultValue={note.text} fullWidth variant='standard' multiline required onChange={(evt) => {
+                    <TextField type='text' value={newText} name='text' id='standard-required' label='Note Text' fullWidth variant='standard' multiline required onChange={(evt) => {
                         if (evt.target.value === null) {
                             setNewText(note.text)
                         } else {

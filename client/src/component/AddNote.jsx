@@ -28,10 +28,10 @@ export default function AddNote({ notes, onNotesChange }) {
             <Dialog open={openAdd} onClose={handleClose}>
                 <DialogTitle>Create new note</DialogTitle>
                 <DialogContent>
-                    <TextField autoFocus type='text' id='standard-required' label='Note Title' fullWidth variant='standard' required onChange={(evt) => {
+                    <TextField autoFocus type='text' value={title} id='standard-required' label='Note Title' fullWidth variant='standard' required onChange={(evt) => {
                         setTitle(evt.target.value)
                     }} />
-                    <TextField type='text' name='text' id='standard-required' label='Note Text' fullWidth variant='standard' multiline required onChange={(evt) => {
+                    <TextField type='text' name='text' value={text} id='standard-required' label='Note Text' fullWidth variant='standard' multiline required onChange={(evt) => {
                         setText(evt.target.value)
                     }} />
                 </DialogContent>
