@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
 
 const noteSchema = new mongoose.Schema({
-    title: {
+    user: {
         required: true,
         type: String
     },
-    text: {
+    pass: {
         required: true,
         type: String
+    },
+    notes:{
+        type: [{title: String, text: String}]
     }
 })
 

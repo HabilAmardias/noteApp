@@ -14,53 +14,83 @@ mongoose.connect('mongodb://127.0.0.1/noteApp')
     })
 app.use(cors())
 app.use(express.json())
-app.get('/', async (req, res, next) => {
+app.get('/users', async (req, res, next) => {
     try {
-        const dataNotes = await Note.find({});
-        res.json(dataNotes);
+        const dataUsers = await Note.find({});
+        res.json(dataUsers);
     } catch (err) {
-        next(err)
+        next(err);
     }
 });
 
-app.post('/', async (req, res, next) => {
+app.post('/users', async (req, res, next) => {
     try {
-        const newNote = new Note(req.body)
-        const createdNote = await newNote.save();
-        res.json(createdNote);
+        const newUser = new Note(req.body);
+        const createdUser = await newUser.save();
+        res.json(createdUser);
     } catch (err) {
-        next(err)
+        next(err);
     }
 });
 
-app.patch('/:id', async (req, res, next) => {
-    try {
-        const { id } = req.params
-        await Note.findByIdAndUpdate(id, req.body, { runValidators: true, new: true });
-        res.send('edited')
-    } catch (err) {
-        next(err)
+app.get('/users/:id', async(req,res,next)=>{
+    try{
+        const {id} = req.params;
+        const user = await Note.findById(id);
+        res.json(user);
+    } catch {
+        next(err);
     }
 });
 
-app.delete('/:id', async (req, res, next) => {
+app.delete('/users/:id/notes/:index', async(req,res,next)=>{
     try {
-        const { id } = req.params;
-        await Note.findByIdAndDelete(id);
-        res.send('deleted');
-    } catch (err) {
-        next(err)
+        const id = req.params.id;
+        const index = req.params.index;
+        const user = await Note.findById(id);
+        user.notes.splice(parseInt(index),1);
+        await user.save();
+        res.json(user);
+    } catch {
+        next(err);
     }
 });
+
+app.post('/users/:id/notes', async(req,res,next) => {
+    try {
+        const id = req.params.id;
+        const user = await Note.findById(id);
+        const {title, text} = req.body;
+        user.notes.push({title,text});
+        await user.save();
+        res.json(user);
+    } catch {
+        next(err);
+    }
+});
+
+app.patch('/users/:id/notes/:index', async(req, res, next)=>{
+    try{
+        const id = req.params.id;
+        const index = req.params.index;
+        const user = await Note.findById(id);
+        const {newTitle, newText} = req.body;
+        user.notes.splice(parseInt(index),1,{newTitle,newText});
+        await user.save();
+        res.json(user);
+    } catch {
+        next(err);
+    }
+})
 
 const handleValidationErr = (err) => {
-    return new ErrorHandling(`Validation Failed, ${err.message}`, 400)
+    return new ErrorHandling(`Validation Failed, ${err.message}`, 400);
 };
 
 app.use((err, req, res, next) => {
     if (err.name === 'Validation Error') {
-        err = handleValidationErr(err)
-        next(err)
+        err = handleValidationErr(err);
+        next(err);
     };
 });
 
@@ -70,5 +100,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(8888, () => {
-    console.log('Connected')
+    console.log('Connected');
 });
