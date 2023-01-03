@@ -15,19 +15,19 @@ function App() {
     getNotes()
   }, [])
   return (
-    <div>
-      <section>
+    <div className='main-container'>
+      <section className='header-container'>
         <h1>Notes</h1>
         <AddNote notes={notes} onNotesChange={setNotes} />
       </section>
-      <section>
+      <section className='all-notes-container'>
         {notes.map((note) => (
-          <div key={note._id}>
+          <div className='note-container' key={note._id}>
             <h3>{note.title}</h3>
             <p>{note.text}</p>
-            <section>
-              <DeleteNote note={note} notes={notes} onNotesChange={setNotes} />
+            <section className='action-button'>
               <EditNote note={note} notes={notes} onNotesChange={setNotes} />
+              <DeleteNote note={note} notes={notes} onNotesChange={setNotes} />
             </section>
           </div>
         ))}
