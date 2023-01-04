@@ -37,6 +37,16 @@ app.post('/users', async (req, res, next) => {
     }
 });
 
+app.delete('/users/:id', async(req,res,next)=>{
+    try{
+        const {id} = req.params;
+        const deleteUser = await Note.findByIdAndDelete(id);
+        res.json(deleteUser);
+    } catch{
+        next(err);
+    }
+});
+
 app.get('/users/:id', async(req,res,next)=>{
     try{
         const {id} = req.params;
