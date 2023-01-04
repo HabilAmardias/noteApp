@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "./api/config";
+import SignUpForm from "./component/SignUpForm";
+import './Login.css'
 
 export default function Login(){
     const [users, setUsers] = useState([]);
@@ -10,20 +12,7 @@ export default function Login(){
         const response = await fetch(`${API_URL}/users`, { method: 'GET' });
         const data = await response.json();
         setUsers(data);
-      };
-    const createUser = async () => {
-        const requestOption = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user: username, pass: password })
-        };
-        const response = await fetch(`${API_URL}/users`, requestOption);
-        const data = await response.json();
-        setUsers([...users, data]);
     };
-    const openLoginHandler = ()=>{
-        setLogin(true)
-    }
     const closeLoginHandler = ()=>{
         setLogin(false)
     }
@@ -31,71 +20,46 @@ export default function Login(){
         getUsers();
     },[])
     return(
-        <div>
+        <div className="container">
             {login ? (
-            <>
-                <form className="form-login">
+            <div className="form-container">
+                <form>
                     <h3>Login</h3>
                     <section className="username-container">
-                        <label htmlFor="username">Username:</label>
                         <input
                             type="text"
                             required
                             id="username"
                             name="username"
+                            placeholder="Username"
                             value={username}
                             onChange={(e)=>{setUsername(e.target.value)}}
                         />
                     </section>
                     <section className="password-container">
-                        <label htmlFor="password">Password:</label>
                         <input
                             type="password"
                             required
                             id="password"
                             name="password"
+                            placeholder="Password"
                             value={password}
                             onChange={(e)=>{setPassword(e.target.value)}}
                         />
                     </section>
-                    <button type="submit">Login</button>
+                    <button className="submit-handler" type="submit">Login</button>
                 </form>
-                <p>Don't have an account? <button onClick={closeLoginHandler}>Sign-Up</button></p>
-            </>
+                <p>Don't have an account? <button className="login-handler" onClick={closeLoginHandler}>Sign-Up</button></p>
+            </div>
             ) : (
-                <>
-                    <form className="form-signup" onSubmit={(e)=>{
-                        e.preventDefault();
-                        createUser();
-                        openLoginHandler();
-                        }} method='POST'>
-                        <h3>Sign-Up</h3>
-                        <section className="username-container">
-                            <label htmlFor="username">Username:</label>
-                            <input
-                                type="text"
-                                required
-                                id="username"
-                                name="username"
-                                value={username}
-                                onChange={(e)=>{setUsername(e.target.value)}}
-                            />
-                        </section>
-                        <section className="password-container">
-                            <label htmlFor="password">Password:</label>
-                            <input
-                                type="password"
-                                required
-                                id="password"
-                                name="password"
-                                value={password}
-                                onChange={(e)=>{setPassword(e.target.value)}}
-                            />
-                        </section>
-                        <button type="submit">Sign-Up</button>
-                    </form>
-                    <p>Already have an account? <button onClick={openLoginHandler}>Log in</button></p>
-                </>
+                <SignUpForm 
+                username={username} 
+                password={password} 
+                onUsersChange={setUsers} 
+                onLoginChange={setLogin} 
+                onUsernameChange={setUsername} 
+                onPasswordChange={setPassword} 
+                />
             )}
         </div>
     )

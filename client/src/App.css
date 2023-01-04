@@ -10,11 +10,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 1rem;
+  padding: 0 1rem;
+  background-color: #242424;
 }
 
 .all-notes-container{
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin: 0 1rem;
 }
@@ -24,9 +26,12 @@
   width: 20%;
   height: fit-content;
   flex-direction: column;
-  border: 1px solid white;
+  border: 1px solid #242424;
   border-radius: 10px;
+  gap: 10px;
   padding: 1rem;
+  background-color: #242424;
+  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19);
 }
 
 .action-button{
@@ -34,9 +39,20 @@
 }
 
 h3{
-  margin-top: 0;
+  margin: 0;
 }
 
 p{
   margin-top: 0;
+}
+
+@media (max-width:900px){
+  .all-notes-container{
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .note-container{
+    width: 80%;
+  }
 }
