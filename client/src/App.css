@@ -38,12 +38,13 @@
   display: flex;
 }
 
-h3{
+.note-title{
   margin: 0;
 }
 
-p{
+.note-text{
   margin-top: 0;
+  margin-bottom: 0;
 }
 
 @media (max-width:900px){

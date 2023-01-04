@@ -20,7 +20,7 @@ export default function SignUpForm({ username, password, onUsersChange, onLoginC
                 createUser();
                 openLoginHandler();
                 }} method='POST'>
-                <h3>Sign-Up</h3>
+                <h3 className="login-title">Sign-Up</h3>
                 <section className="username-container">
                     <input
                         type="text"
@@ -45,7 +45,7 @@ export default function SignUpForm({ username, password, onUsersChange, onLoginC
                 </section>
                 <button className="submit-handler" type="submit">Sign-Up</button>
             </form>
-            <p>Already have an account? <button className="login-handler" onClick={openLoginHandler}>Log in</button></p>
+            <p className="account">Already have an account? <button className="login-handler" onClick={openLoginHandler}>Log in</button></p>
         </div>
     )
 }

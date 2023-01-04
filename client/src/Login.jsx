@@ -15,23 +15,24 @@ export default function Login(){
         setUsers(data);
     };
     const closeLoginHandler = ()=>{
-        setLogin(false)
+        setLogin(false);
     };
     const navigate = useNavigate();
+    const loginHandler = ()=>{
+        console.log(users);
+        console.log(username);
+        console.log(password);
+        const searchUser = users.find(obj =>obj.user === username && obj.pass === password);
+        console.log(searchUser);
+        if (!searchUser) {
+            navigate('/error404');
+        } else{
+            navigate(`/notes/${searchUser._id}`);
+        };
+    };
     useEffect(()=>{
         getUsers();
     },[]);
-    const loginHandler = ()=>{
-        const searchUser = users.find(obj =>{obj.user === username});
-        const searchPass = users.find(obj =>{obj.pass === password});
-        console.log(users)
-        //console.log(searchPass)
-        if (!searchUser || !searchPass) {
-            navigate('/error404');
-        } else{
-            navigate(`/notes/${searchUser._id}`)
-        }
-    };
     return(
         <div className="container">
             {login ? (
@@ -40,7 +41,7 @@ export default function Login(){
                     e.preventDefault()
                     loginHandler()
                     }}>
-                    <h3>Login</h3>
+                    <h3 className="login-title">Login</h3>
                     <section className="username-container">
                         <input
                             type="text"
@@ -65,7 +66,7 @@ export default function Login(){
                     </section>
                     <button className="submit-handler" type="submit">Login</button>
                 </form>
-                <p>Don't have an account? <button className="login-handler" onClick={closeLoginHandler}>Sign-Up</button></p>
+                <p className="account">Don't have an account? <button className="login-handler" onClick={closeLoginHandler}>Sign-Up</button></p>
             </div>
             ) : (
                 <SignUpForm 
