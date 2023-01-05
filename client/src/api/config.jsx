@@ -1,1 +1,1 @@
-export const API_URL = 'https://note-app-api.vercel.app/'
+export const API_URL = 'https://note-app-api.vercel.app'
