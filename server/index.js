@@ -15,9 +15,7 @@ mongoose.connect(process.env.MONGODB_URL)
     })
 
 
-app.use(cors({
-  origin: ["http://localhost:5173", "https://note-app-azure.vercel.app/"]  
-}))
+app.use(cors())
 app.use(express.json())
 
 
