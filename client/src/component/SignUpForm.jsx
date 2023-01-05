@@ -1,5 +1,6 @@
 import { API_URL } from "../api/config";
-export default function SignUpForm({ username, password, onUsersChange, onLoginChange, onUsernameChange, onPasswordChange}){
+import { useNavigate } from "react-router-dom";
+export default function SignUpForm({ users, username, password, onUsersChange, onLoginChange, onUsernameChange, onPasswordChange}){
     const createUser = async () => {
         const requestOption = {
             method: 'POST',
@@ -12,7 +13,8 @@ export default function SignUpForm({ username, password, onUsersChange, onLoginC
     };
     const openLoginHandler = ()=>{
         onLoginChange(true)
-    }
+    };
+    const navigate = useNavigate()
     return(
         <div className="form-container">
             <form onSubmit={(e)=>{

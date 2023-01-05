@@ -32,7 +32,7 @@ export default function Login(){
     };
     useEffect(()=>{
         getUsers();
-    },[]);
+    },[users]);
     return(
         <div className="container">
             {login ? (
@@ -69,7 +69,8 @@ export default function Login(){
                 <p className="account">Don't have an account? <button className="login-handler" onClick={closeLoginHandler}>Sign-Up</button></p>
             </div>
             ) : (
-                <SignUpForm 
+                <SignUpForm
+                users={users} 
                 username={username} 
                 password={password} 
                 onUsersChange={setUsers} 
