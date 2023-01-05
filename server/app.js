@@ -1,11 +1,10 @@
 require('dotenv').config()
-console.log(process.env.MONGODB_URL)
 const express = require('express')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
-const Note = require('./models/Note.js')
-const ErrorHandling = require('./ErrorHandling')
+const Note = require('./src/models/Note.js')
+const ErrorHandling = require('./src/ErrorHandling')
 mongoose.set('strictQuery', false);
 mongoose.connect(process.env.MONGODB_URL)
     .then(() => {
