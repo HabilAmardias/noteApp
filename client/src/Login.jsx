@@ -10,7 +10,7 @@ export default function Login(){
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const getUsers = async () => {
-        const response = await fetch(`${API_URL}/users`, { method: 'GET', mode:'cors' });
+        const response = await fetch(`${API_URL}/users`, { method: 'GET' });
         const data = await response.json();
         setUsers(data);
     };
