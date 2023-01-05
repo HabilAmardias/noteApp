@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -5,7 +6,7 @@ const mongoose = require('mongoose')
 const Note = require('./models/Note.js')
 const ErrorHandling = require('./ErrorHandling')
 mongoose.set('strictQuery', false);
-mongoose.connect('mongodb://127.0.0.1/noteApp')
+mongoose.connect(process.env.MONGODB_URL)
     .then(() => {
         console.log('Connected')
     })
