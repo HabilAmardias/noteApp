@@ -14,7 +14,9 @@ mongoose.connect('mongodb://127.0.0.1/noteApp')
     })
 
 
-app.use(cors())
+app.use(cors({
+  origin: ["http://localhost:5173", "https://note-app.onrender.com"]  
+}))
 app.use(express.json())
 
 
