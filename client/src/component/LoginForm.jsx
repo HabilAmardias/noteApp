@@ -1,27 +1,25 @@
-import { API_URL } from "../api/config";
 import { useNavigate } from "react-router-dom";
-export default function SignUpForm({ users, username, password, onUsersChange, onLoginChange, onUsernameChange, onPasswordChange}){
-    const createUser = async () => {
-        const requestOption = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user: username, pass: password })
+
+export default function LoginForm ({users, username, password, onLoginChange, onUsernameChange, onPasswordChange}){
+    const navigate = useNavigate();
+    const loginHandler = ()=>{
+        const searchUser = users.find(obj =>obj.user === username && obj.pass === password);
+        if (!searchUser) {
+            navigate('/error404');
+        } else{
+            navigate(`/notes/${searchUser._id}`);
         };
-        const response = await fetch(`${API_URL}/users`, requestOption);
-        const data = await response.json();
-        onUsersChange([...users, data]);
     };
-    const openLoginHandler = ()=>{
-        onLoginChange(true)
+    const closeLoginHandler = ()=>{
+        onLoginChange(false);
     };
     return(
         <div className="form-container">
             <form onSubmit={(e)=>{
-                e.preventDefault();
-                createUser();
-                openLoginHandler();
-                }} method='POST'>
-                <h3 className="login-title">Sign-Up</h3>
+                e.preventDefault()
+                loginHandler()
+                }}>
+                <h3 className="login-title">Login</h3>
                 <section className="username-container">
                     <input
                         type="text"
@@ -44,9 +42,9 @@ export default function SignUpForm({ users, username, password, onUsersChange, o
                         onChange={(e)=>{onPasswordChange(e.target.value)}}
                     />
                 </section>
-                <button className="submit-handler" type="submit">Sign-Up</button>
+                <button className="submit-handler" type="submit">Login</button>
             </form>
-            <p className="account">Already have an account? <button className="login-handler" onClick={openLoginHandler}>Log in</button></p>
+            <p className="account">Don't have an account? <button className="login-handler" onClick={closeLoginHandler}>Sign-Up</button></p>
         </div>
     )
 }
