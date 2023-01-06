@@ -46,8 +46,8 @@ function App() {
                 <h3 className='note-title'>{note.title}</h3>
                 <p className='note-text'>{note.text}</p>
                 <section className='action-button'>
-                  <EditNote note={note} id={userId} number={index} onNotesChange={setNotes} onLoadingChange={setLoading}/>
-                  <DeleteNote note={note} id={userId} number={index} onNotesChange={setNotes} onLoadingChange={setLoading}/>
+                  <EditNote note={note} id={userId} number={index} onNotesChange={setNotes}/>
+                  <DeleteNote note={note} id={userId} number={index} onNotesChange={setNotes}/>
                 </section>
               </div>
             ))}
