@@ -3,7 +3,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText, Button, IconButton } from "@mui/material";
 import { API_URL } from "../api/config";
 
-export default function DeleteNote({ onNotesChange, note, id, number, onLoadingChange }) {
+export default function DeleteNote({ onNotesChange, note, id, number }) {
     const [openDelete, setOpenDelete] = useState(false)
     const deleteNote = async (index) => {
         const requestOption = {
