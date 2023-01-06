@@ -1,13 +1,14 @@
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react';
-import { Dialog, DialogActions, DialogTitle, DialogContent, Button, TextField } from '@mui/material';
+import { Dialog, DialogActions, DialogTitle, DialogContent, Button, TextField, IconButton } from '@mui/material';
 import { API_URL } from '../api/config';
 
-export default function AddNote({ onNotesChange, id }) {
+export default function AddNote({ onNotesChange, id, onLoadingChange }) {
     const [openAdd, setOpenAdd] = useState(false)
     const [text, setText] = useState('');
     const [title, setTitle] = useState('');
     const newNote = async () => {
+        onLoadingChange(true);
         const requestOption = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -16,6 +17,7 @@ export default function AddNote({ onNotesChange, id }) {
         const response = await fetch(`${API_URL}/users/${id}/notes`, requestOption);
         const data = await response.json();
         onNotesChange(data.notes);
+        onLoadingChange(false);
     };
     const handleOpen = () => {
         setOpenAdd(true);
@@ -25,7 +27,9 @@ export default function AddNote({ onNotesChange, id }) {
     };
     return (
         <>
-            <AddIcon onClick={handleOpen} />
+            <IconButton sx={{color: 'white'}} onClick={handleOpen}>
+                <AddIcon  />
+            </IconButton>
             <Dialog open={openAdd} onClose={handleClose}>
                 <DialogTitle>Create new note</DialogTitle>
                 <DialogContent>

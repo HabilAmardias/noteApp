@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Dialog, DialogTitle, DialogActions, DialogContent, Button, TextField } from "@mui/material";
+import { Dialog, DialogTitle, DialogActions, DialogContent, Button, TextField, IconButton } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { API_URL } from "../api/config";
-export default function DeleteNote({ onNotesChange, note, id, number }) {
+export default function EditNote({ onNotesChange, note, id, number, onLoadingChange }) {
     const [openEdit, setOpenEdit] = useState(false)
     const [newTitle, setNewTitle] = useState('')
     const [newText, setNewText] = useState('')
     const editNote = async (index) => {
+        onLoadingChange(true);
         const requestOption = {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -14,7 +15,8 @@ export default function DeleteNote({ onNotesChange, note, id, number }) {
         };
         const response = await fetch(`${API_URL}/users/${id}/notes/${index}`, requestOption);
         const data = await response.json();
-        onNotesChange(data.notes)
+        onNotesChange(data.notes);
+        onLoadingChange(false);
     };
     const handleClickOpenEdit = () => {
         setOpenEdit(true);
@@ -24,23 +26,17 @@ export default function DeleteNote({ onNotesChange, note, id, number }) {
     };
     return (
         <>
-            <EditIcon onClick={handleClickOpenEdit} />
+            <IconButton sx={{color:'white'}} size='small' onClick={handleClickOpenEdit}>
+                <EditIcon  />
+            </IconButton>
             <Dialog open={openEdit} onClose={handleCloseEdit}>
                 <DialogTitle>Edit note</DialogTitle>
                 <DialogContent>
                     <TextField autoFocus type='text' value={newTitle} id='standard-required' label='Note Title' fullWidth variant='standard' required onChange={(evt) => {
-                        if (evt.target.value === null) {
-                            setNewTitle(note.title)
-                        } else {
-                            setNewTitle(evt.target.value)
-                        }
+                        setNewTitle(evt.target.value)
                     }} />
                     <TextField type='text' value={newText} name='text' id='standard-required' label='Note Text' fullWidth variant='standard' multiline required onChange={(evt) => {
-                        if (evt.target.value === null) {
-                            setNewText(note.text)
-                        } else {
-                            setNewText(evt.target.value)
-                        }
+                        setNewText(evt.target.value)
                     }} />
                 </DialogContent>
                 <DialogActions>
