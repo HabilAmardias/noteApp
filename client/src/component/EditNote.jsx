@@ -2,12 +2,11 @@ import { useState } from "react";
 import { Dialog, DialogTitle, DialogActions, DialogContent, Button, TextField, IconButton } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { API_URL } from "../api/config";
-export default function EditNote({ onNotesChange, note, id, number, onLoadingChange }) {
+export default function EditNote({ onNotesChange, note, id, number}) {
     const [openEdit, setOpenEdit] = useState(false)
     const [newTitle, setNewTitle] = useState('')
     const [newText, setNewText] = useState('')
     const editNote = async (index) => {
-        onLoadingChange(true);
         const requestOption = {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -16,7 +15,6 @@ export default function EditNote({ onNotesChange, note, id, number, onLoadingCha
         const response = await fetch(`${API_URL}/users/${id}/notes/${index}`, requestOption);
         const data = await response.json();
         onNotesChange(data.notes);
-        onLoadingChange(false);
     };
     const handleClickOpenEdit = () => {
         setOpenEdit(true);

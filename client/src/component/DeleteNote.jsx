@@ -6,14 +6,12 @@ import { API_URL } from "../api/config";
 export default function DeleteNote({ onNotesChange, note, id, number, onLoadingChange }) {
     const [openDelete, setOpenDelete] = useState(false)
     const deleteNote = async (index) => {
-        onLoadingChange(true);
         const requestOption = {
             method: 'DELETE',
         };
         const response = await fetch(`${API_URL}/users/${id}/notes/${index}`, requestOption);
         const data = await response.json();
         onNotesChange(data.notes)
-        onLoadingChange(false);
     };
     const handleClickOpenDelete = () => {
         setOpenDelete(true);
