@@ -4,8 +4,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import { API_URL } from "../api/config";
 export default function EditNote({ onNotesChange, note, id, number}) {
     const [openEdit, setOpenEdit] = useState(false)
-    const [newTitle, setNewTitle] = useState('')
-    const [newText, setNewText] = useState('')
+    const [newTitle, setNewTitle] = useState(`${note.title}`)
+    const [newText, setNewText] = useState(`${note.text}`)
     const editNote = async (index) => {
         const requestOption = {
             method: 'PATCH',
