@@ -64,7 +64,15 @@ function App() {
     </div>
     )
   } else {
-    navigate('/');
+    return(
+      <div className='not-loggedin-page-container'>
+        <div className='not-loggedin-container'>
+          <h2 className='not-logged-in-title'>Oops you're not logged in</h2>
+          <p className='not-logged-in-text'>You need to login to access your notes</p>
+          <button className='login-redirect-handler' onClick={(e)=>{navigate('/')}}>Login</button>
+        </div>
+      </div>
+    )
   }
 }
 
