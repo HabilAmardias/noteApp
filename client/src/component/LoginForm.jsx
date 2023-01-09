@@ -2,12 +2,17 @@ import { useNavigate } from "react-router-dom";
 
 export default function LoginForm ({users, username, password, onLoginChange, onUsernameChange, onPasswordChange}){
     const navigate = useNavigate();
-    const loginHandler = ()=>{
-        const searchUser = users.find(obj =>obj.user === username && obj.pass === password);
-        if (!searchUser) {
-            navigate('/error404');
+    const loginHandler = async()=>{
+        const requestOption = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user: username, pass: password })
+        };
+        const response = await fetch(`${API_URL}/login`, requestOption);
+        if (response) {
+            navigate(`/notes/${response._id}`);
         } else{
-            navigate(`/notes/${searchUser._id}`);
+            navigate('/error404');
         };
     };
     const closeLoginHandler = ()=>{

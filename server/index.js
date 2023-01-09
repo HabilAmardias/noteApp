@@ -3,6 +3,8 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt');
+const session = require('express-session');
 const Note = require('./src/models/Note.js')
 const ErrorHandling = require('./src/ErrorHandling')
 mongoose.set('strictQuery', false);
@@ -28,9 +30,24 @@ app.get('/users', async (req, res, next) => {
     }
 });
 
+app.post('/login', async(req,res,next)=>{
+    try{
+        const {user, pass} = req.body;
+        const findUser = await Note.findAndAuth(user, pass);
+        if(findUser){
+            res.json(findUser);
+        } else{
+            res.send(findUser);
+        }
+    } catch(err) {
+        next(err);
+    }
+})
+
 app.post('/users', async (req, res, next) => {
     try {
-        const newUser = new Note(req.body);
+        const {user, pass} = req.body;
+        const newUser = new Note ({user, pass});
         const createdUser = await newUser.save();
         res.json(createdUser);
     } catch (err) {
