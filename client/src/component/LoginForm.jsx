@@ -12,7 +12,6 @@ export default function LoginForm ({users, username, password, onLoginChange, on
         };
         const response = await fetch(`${API_URL}/login`, requestOption);
         const data = await response.json();
-        console.log(data)
         if (data) {
             Cookies.set('jwt', data.token);
             navigate(`/notes/${data.User._id}`);
