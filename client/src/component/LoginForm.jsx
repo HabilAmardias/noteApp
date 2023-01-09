@@ -15,7 +15,7 @@ export default function LoginForm ({users, username, password, onLoginChange, on
         console.log(data)
         if (data) {
             Cookies.set('jwt', data.token);
-            navigate(`/notes/${data._id}`);
+            navigate(`/notes/${data.User._id}`);
         } else{
             navigate('/error404');
         };
