@@ -10,8 +10,10 @@ export default function LoginForm ({users, username, password, onLoginChange, on
             body: JSON.stringify({ user: username, pass: password })
         };
         const response = await fetch(`${API_URL}/login`, requestOption);
-        if (response) {
-            navigate(`/notes/${response._id}`);
+        const data = await response.json();
+        console.log(data)
+        if (data) {
+            navigate(`/notes/${data._id}`);
         } else{
             navigate('/error404');
         };
