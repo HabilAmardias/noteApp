@@ -7,6 +7,7 @@ import { API_URL } from './api/config';
 import { useNavigate, useParams } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { IconButton } from '@mui/material';
+import Cookies from 'js-cookie';
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -21,12 +22,15 @@ function App() {
     setLoading(false)
   };
   const navigate = useNavigate();
+  const jwt = Cookies.get('jwt');
 
   useEffect(() => {
     getNotes()
   }, [userId])
-  return (
-    <div className='main-container'>
+
+  if (jwt) {
+    return(
+      <div className='main-container'>
       {loading ? (
         <div>
           <p>Loading.....</p>
@@ -36,7 +40,10 @@ function App() {
           <section className='header-container'>
             <h1>Notes</h1>
             <AddNote onNotesChange={setNotes} id={userId} onLoadingChange={setLoading} />
-            <IconButton sx={{color:'white'}} onClick={(e)=>{navigate('/')}}>
+            <IconButton sx={{color:'white'}} onClick={(e)=>{
+              navigate('/');
+              Cookies.remove('jwt');
+              }}>
               <LogoutIcon />
             </IconButton>
           </section>
@@ -54,9 +61,11 @@ function App() {
           </section>
         </>
       )}
-      
     </div>
-  );
+    )
+  } else {
+    navigate('/');
+  }
 }
 
 export default App;

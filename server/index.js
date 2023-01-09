@@ -4,9 +4,9 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt');
-const session = require('express-session');
-const Note = require('./src/models/Note.js')
-const ErrorHandling = require('./src/ErrorHandling')
+const jwt = require('jsonwebtoken');
+const Note = require('./src/models/Note.js');
+const ErrorHandling = require('./src/ErrorHandling');
 mongoose.set('strictQuery', false);
 mongoose.connect(process.env.MONGODB_URL)
     .then(() => {
@@ -20,6 +20,7 @@ mongoose.connect(process.env.MONGODB_URL)
 app.use(cors())
 app.use(express.json())
 
+const JWT_SECRET = process.env.JWT_SECRET;
 
 app.get('/users', async (req, res, next) => {
     try {
@@ -35,7 +36,8 @@ app.post('/login', async(req,res,next)=>{
         const {user, pass} = req.body;
         const findUser = await Note.findAndAuth(user, pass);
         if(findUser){
-            res.json(findUser);
+            const token = jwt.sign({sub: findUser._id}, JWT_SECRET);
+            res.json({User: findUser, token: token})
         } else{
             res.send(findUser);
         }

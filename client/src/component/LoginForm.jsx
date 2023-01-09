@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../api/config";
+import Cookies from 'js-cookie'
 
 export default function LoginForm ({users, username, password, onLoginChange, onUsernameChange, onPasswordChange}){
     const navigate = useNavigate();
@@ -13,6 +14,7 @@ export default function LoginForm ({users, username, password, onLoginChange, on
         const data = await response.json();
         console.log(data)
         if (data) {
+            Cookies.set('jwt', data.token);
             navigate(`/notes/${data._id}`);
         } else{
             navigate('/error404');
