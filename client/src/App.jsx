@@ -17,7 +17,7 @@ function App() {
   const getNotes = async () => {
     if (!userId) return;
     setLoading(true)
-    const response = await fetch(`${API_URL}/users/${userId}`, { method: 'GET', headers:{'Authorization': `Bearer ${jwt}`}, credentials:'include'});
+    const response = await fetch(`${API_URL}/users/${userId}`, { method: 'GET'});
     const data = await response.json();
     setNotes(data.notes);
     setLoading(false)
@@ -38,7 +38,7 @@ function App() {
         <>
           <section className='header-container'>
             <h1>Notes</h1>
-            <AddNote onNotesChange={setNotes} id={userId} onLoadingChange={setLoading} jwt={jwt} />
+            <AddNote onNotesChange={setNotes} id={userId} onLoadingChange={setLoading} />
             <IconButton sx={{color:'white'}} onClick={(e)=>{
               navigate('/');
               Cookies.remove('jwt');
@@ -52,8 +52,8 @@ function App() {
                 <h3 className='note-title'>{note.title}</h3>
                 <p className='note-text'>{note.text}</p>
                 <section className='action-button'>
-                  <EditNote note={note} id={userId} number={index} onNotesChange={setNotes} jwt={jwt}/>
-                  <DeleteNote note={note} id={userId} number={index} onNotesChange={setNotes} jwt={jwt}/>
+                  <EditNote note={note} id={userId} number={index} onNotesChange={setNotes}/>
+                  <DeleteNote note={note} id={userId} number={index} onNotesChange={setNotes}/>
                 </section>
               </div>
             ))}
