@@ -3,13 +3,11 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText, Button, IconButton } from "@mui/material";
 import { API_URL } from "../api/config";
 
-export default function DeleteNote({ onNotesChange, note, id, number, jwt }) {
+export default function DeleteNote({ onNotesChange, note, id, number}) {
     const [openDelete, setOpenDelete] = useState(false)
     const deleteNote = async (index) => {
         const requestOption = {
             method: 'DELETE',
-            headers:{'Authorization': `Bearer ${jwt}`},
-            credentials:'include'
         };
         const response = await fetch(`${API_URL}/users/${id}/notes/${index}`, requestOption);
         const data = await response.json();

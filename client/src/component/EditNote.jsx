@@ -3,7 +3,7 @@ import { Dialog, DialogTitle, DialogActions, DialogContent, Button, TextField, I
 import EditIcon from '@mui/icons-material/Edit';
 import { API_URL } from "../api/config";
 
-export default function EditNote({ onNotesChange, note, id, number, jwt}) {
+export default function EditNote({ onNotesChange, note, id, number}) {
     const [openEdit, setOpenEdit] = useState(false);
     const [newTitle, setNewTitle] = useState(`${note.title}`);
     const [newText, setNewText] = useState(`${note.text}`);
@@ -12,8 +12,6 @@ export default function EditNote({ onNotesChange, note, id, number, jwt}) {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ title: newTitle, text: newText }),
-            headers:{'Authorization': `Bearer ${jwt}`},
-            credentials:'include'
         };
         const response = await fetch(`${API_URL}/users/${id}/notes/${index}`, requestOption);
         const data = await response.json();
