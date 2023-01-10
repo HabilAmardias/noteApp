@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Dialog, DialogActions, DialogTitle, DialogContent, Button, TextField, IconButton } from '@mui/material';
 import { API_URL } from '../api/config';
 
-export default function AddNote({ onNotesChange, id, onLoadingChange }) {
+export default function AddNote({ onNotesChange, id, onLoadingChange, jwt }) {
     const [openAdd, setOpenAdd] = useState(false)
     const [text, setText] = useState('');
     const [title, setTitle] = useState('');
@@ -12,7 +12,9 @@ export default function AddNote({ onNotesChange, id, onLoadingChange }) {
         const requestOption = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: title, text: text })
+            body: JSON.stringify({ title: title, text: text }),
+            headers:{'Authorization': `Bearer ${jwt}`},
+            credentials:'include'
         };
         const response = await fetch(`${API_URL}/users/${id}/notes`, requestOption);
         const data = await response.json();

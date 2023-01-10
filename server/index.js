@@ -22,6 +22,20 @@ app.use(express.json())
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+const authJWT = (req,res,next)=>{
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) {
+        return res.status(401).send();
+    }
+    jwt.verify(token, JWT_SECRET, (error,user)=>{
+        if(error || !user){
+            return res.status(401).send();
+        }
+        next()
+    });
+};
+
 app.get('/users', async (req, res, next) => {
     try {
         const dataUsers = await Note.find({});
@@ -67,7 +81,7 @@ app.delete('/users/:id', async(req,res,next)=>{
     }
 });
 
-app.get('/users/:id', async(req,res,next)=>{
+app.get('/users/:id', authJWT, async(req,res,next)=>{
     try{
         const {id} = req.params;
         const user = await Note.findById(id);
@@ -77,7 +91,7 @@ app.get('/users/:id', async(req,res,next)=>{
     }
 });
 
-app.delete('/users/:id/notes/:index', async(req,res,next)=>{
+app.delete('/users/:id/notes/:index', authJWT, async(req,res,next)=>{
     try {
         const id = req.params.id;
         const index = req.params.index;
@@ -90,7 +104,7 @@ app.delete('/users/:id/notes/:index', async(req,res,next)=>{
     }
 });
 
-app.post('/users/:id/notes', async(req,res,next) => {
+app.post('/users/:id/notes', authJWT, async(req,res,next) => {
     try {
         const id = req.params.id;
         const user = await Note.findById(id);
@@ -103,7 +117,7 @@ app.post('/users/:id/notes', async(req,res,next) => {
     }
 });
 
-app.patch('/users/:id/notes/:index', async(req, res, next)=>{
+app.patch('/users/:id/notes/:index', authJWT, async(req, res, next)=>{
     try{
         const id = req.params.id;
         const index = req.params.index;
