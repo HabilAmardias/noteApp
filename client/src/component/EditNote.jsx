@@ -3,19 +3,20 @@ import { Dialog, DialogTitle, DialogActions, DialogContent, Button, TextField, I
 import EditIcon from '@mui/icons-material/Edit';
 import { API_URL } from "../api/config";
 
-export default function EditNote({ onNotesChange, note, id, number}) {
+export default function EditNote({ onNotesChange, note, id, number, jwt }) {
     const [openEdit, setOpenEdit] = useState(false);
     const [newTitle, setNewTitle] = useState(`${note.title}`);
     const [newText, setNewText] = useState(`${note.text}`);
     const editNote = async (index) => {
         const requestOption = {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
             body: JSON.stringify({ title: newTitle, text: newText }),
+            credentials: "include"
         };
         const response = await fetch(`${API_URL}/users/${id}/notes/${index}`, requestOption);
         const data = await response.json();
-        onNotesChange(data.notes);
+        onNotesChange(data.user.notes);
     };
     const handleClickOpenEdit = () => {
         setOpenEdit(true);
@@ -25,8 +26,8 @@ export default function EditNote({ onNotesChange, note, id, number}) {
     };
     return (
         <>
-            <IconButton sx={{color:'white'}} size='small' onClick={handleClickOpenEdit}>
-                <EditIcon  />
+            <IconButton sx={{ color: 'white' }} size='small' onClick={handleClickOpenEdit}>
+                <EditIcon />
             </IconButton>
             <Dialog open={openEdit} onClose={handleCloseEdit}>
                 <DialogTitle>Edit note</DialogTitle>

@@ -17,7 +17,7 @@ mongoose.connect(process.env.MONGODB_URL)
     })
 
 
-app.use(cors())
+app.use(cors({ origin: 'https://note-app-azure.vercel.app', credentials: true }))
 app.use(express.json())
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -31,25 +31,25 @@ app.get('/users', async (req, res, next) => {
     }
 });
 
-app.post('/login', async(req,res,next)=>{
-    try{
-        const {user, pass} = req.body;
+app.post('/login', async (req, res, next) => {
+    try {
+        const { user, pass } = req.body;
         const findUser = await Note.findAndAuth(user, pass);
-        if(findUser){
-            const token = jwt.sign({sub: findUser._id}, JWT_SECRET);
-            res.json({User: findUser, token: token})
-        } else{
+        if (findUser) {
+            const token = jwt.sign({ sub: findUser._id }, JWT_SECRET);
+            res.json({ User: findUser, token: token })
+        } else {
             res.send(findUser);
         }
-    } catch(err) {
+    } catch (err) {
         next(err);
     }
 })
 
 app.post('/users', async (req, res, next) => {
     try {
-        const {user, pass} = req.body;
-        const newUser = new Note ({user, pass});
+        const { user, pass } = req.body;
+        const newUser = new Note({ user, pass });
         const createdUser = await newUser.save();
         res.json(createdUser);
     } catch (err) {
@@ -57,62 +57,82 @@ app.post('/users', async (req, res, next) => {
     }
 });
 
-app.delete('/users/:id', async(req,res,next)=>{
-    try{
-        const {id} = req.params;
+app.delete('/users/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
         const deleteUser = await Note.findByIdAndDelete(id);
         res.json(deleteUser);
-    } catch{
+    } catch (err) {
         next(err);
     }
 });
 
-app.get('/users/:id', async(req,res,next)=>{
-    try{
-        const {id} = req.params;
-        const user = await Note.findById(id);
-        res.json(user);
-    } catch {
-        next(err);
-    }
-});
-
-app.delete('/users/:id/notes/:index', async(req,res,next)=>{
+app.get('/users/:id', async (req, res, next) => {
     try {
+        const token = req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(200).json({ success: false, message: 'Error, Token not found' })
+        }
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const { id } = req.params;
+        const user = await Note.findById(id);
+        res.status(200).json({ user, decodedToken });
+    } catch (err) {
+        next(err);
+    }
+});
+
+app.delete('/users/:id/notes/:index', async (req, res, next) => {
+    try {
+        const token = req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(200).json({ success: false, message: 'Error, Token not found' })
+        }
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         const id = req.params.id;
         const index = req.params.index;
         const user = await Note.findById(id);
-        user.notes.splice(parseInt(index),1);
+        user.notes.splice(parseInt(index), 1);
         await user.save();
-        res.json(user);
-    } catch {
+        res.status(200).json({ user, decodedToken });
+    } catch (err) {
         next(err);
     }
 });
 
-app.post('/users/:id/notes', async(req,res,next) => {
+app.post('/users/:id/notes', async (req, res, next) => {
     try {
+        const token = req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(200).json({ success: false, message: 'Error, Token not found' })
+        }
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         const id = req.params.id;
         const user = await Note.findById(id);
-        const {title, text} = req.body;
-        user.notes.push({title: title,text: text});
+        const { title, text } = req.body;
+        user.notes.push({ title: title, text: text });
         await user.save();
-        res.json(user);
-    } catch {
+        res.json({ user, decodedToken });
+    } catch (err) {
         next(err);
     }
 });
 
-app.patch('/users/:id/notes/:index', async(req, res, next)=>{
-    try{
+app.patch('/users/:id/notes/:index', async (req, res, next) => {
+    try {
+        const token = req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(200).json({ success: false, message: 'Error, Token not found' })
+        }
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         const id = req.params.id;
         const index = req.params.index;
         const user = await Note.findById(id);
-        const {title, text} = req.body;
-        user.notes.splice(parseInt(index),1,{title: title, text: text});
+        const { title, text } = req.body;
+        user.notes.splice(parseInt(index), 1, { title: title, text: text });
         await user.save();
-        res.json(user);
-    } catch {
+        res.json({ user, decodedToken });
+    } catch (err) {
         next(err);
     }
 })
@@ -126,7 +146,7 @@ app.use((err, req, res, next) => {
     if (err.name === 'Validation Error') {
         err = handleValidationErr(err);
         next(err);
-    } else{
+    } else {
         next(err);
     }
 });

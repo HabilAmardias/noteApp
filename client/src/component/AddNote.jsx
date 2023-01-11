@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Dialog, DialogActions, DialogTitle, DialogContent, Button, TextField, IconButton } from '@mui/material';
 import { API_URL } from '../api/config';
 
-export default function AddNote({ onNotesChange, id, onLoadingChange}) {
+export default function AddNote({ onNotesChange, id, onLoadingChange, jwt }) {
     const [openAdd, setOpenAdd] = useState(false)
     const [text, setText] = useState('');
     const [title, setTitle] = useState('');
@@ -11,12 +11,13 @@ export default function AddNote({ onNotesChange, id, onLoadingChange}) {
         onLoadingChange(true);
         const requestOption = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
             body: JSON.stringify({ title: title, text: text }),
+            credentials: "include"
         };
         const response = await fetch(`${API_URL}/users/${id}/notes`, requestOption);
         const data = await response.json();
-        onNotesChange(data.notes);
+        onNotesChange(data.user.notes);
         onLoadingChange(false);
     };
     const handleOpen = () => {
@@ -27,8 +28,8 @@ export default function AddNote({ onNotesChange, id, onLoadingChange}) {
     };
     return (
         <>
-            <IconButton sx={{color: 'white'}} onClick={handleOpen}>
-                <AddIcon  />
+            <IconButton sx={{ color: 'white' }} onClick={handleOpen}>
+                <AddIcon />
             </IconButton>
             <Dialog open={openAdd} onClose={handleClose}>
                 <DialogTitle>Create new note</DialogTitle>
