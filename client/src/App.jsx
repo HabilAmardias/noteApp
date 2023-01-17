@@ -36,8 +36,8 @@ function App() {
     return (
       <div className='main-container'>
         {loading ? (
-          <div>
-            <p>Loading.....</p>
+          <div className='loading-container'>
+            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
           </div>
         ) : (
           <>

@@ -4,7 +4,7 @@ import SignUpForm from "./component/SignUpForm";
 import LoginForm from "./component/LoginForm";
 import './Login.css'
 
-export default function Login(){
+export default function Login() {
     const [users, setUsers] = useState([]);
     const [login, setLogin] = useState(true)
     const [username, setUsername] = useState('');
@@ -17,40 +17,40 @@ export default function Login(){
         setUsers(data);
         setLoading(false)
     };
-    useEffect(()=>{
+    useEffect(() => {
         getUsers();
-    },[]);
-    return(
+    }, []);
+    return (
         <>
-        {loading ? (
-            <div>
-                <p>Loading.....</p>
-            </div>
-        ) : (
-            <div className="container">
-                {login ? (
-                <LoginForm 
-                users={users}
-                username={username}
-                password={password}
-                onLoginChange={setLogin}
-                onUsernameChange={setUsername}
-                onPasswordChange={setPassword}
-                />
-                ) : (
-                    <SignUpForm
-                    users={users} 
-                    username={username} 
-                    password={password} 
-                    onUsersChange={setUsers} 
-                    onLoginChange={setLogin} 
-                    onUsernameChange={setUsername} 
-                    onPasswordChange={setPassword} 
-                    />
-                )}
-        </div>
-        )}
-            
+            {loading ? (
+                <div className="loading-container">
+                    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                </div>
+            ) : (
+                <div className="container">
+                    {login ? (
+                        <LoginForm
+                            users={users}
+                            username={username}
+                            password={password}
+                            onLoginChange={setLogin}
+                            onUsernameChange={setUsername}
+                            onPasswordChange={setPassword}
+                        />
+                    ) : (
+                        <SignUpForm
+                            users={users}
+                            username={username}
+                            password={password}
+                            onUsersChange={setUsers}
+                            onLoginChange={setLogin}
+                            onUsernameChange={setUsername}
+                            onPasswordChange={setPassword}
+                        />
+                    )}
+                </div>
+            )}
+
         </>
     )
 }
